@@ -1,21 +1,11 @@
 # run.py
-import jinja2
-from flask import render_template
 
 from App import create_app
+from App.views import Main_views
 
 app = create_app()
 
-
-@app.route('/')
-def welcome():
-    return render_template('welcome.html')
-
-
-@app.route('/app')
-def app_run():
-    return "Hello, world !"
-
+Main_views(app)
 
 if __name__ == '__main__':
     app.run()
