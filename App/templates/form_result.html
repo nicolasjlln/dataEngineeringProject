@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+
+        {% include "form_result_style.html" %}
+    </head>
+    <body>
+        <div class="container parent" align=center>
+            <h1 class="display-4">Résultats de la recherche</h1>
+            <div class="row justify-content-md-center">
+                <div class="col col-lg-2">
+                    <form method="POST" action="{{ url_for('app_run') }}">
+                        <button type=submit class="btn btn-secondary">Nouvelle recherche</button>
+                    </form>
+                </div>
+                <div class="col col-lg-2">
+                    <form method="GET" action="{{ url_for('app_run') }}">
+                        <button type=submit class="btn btn-secondary">Retour au menu</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

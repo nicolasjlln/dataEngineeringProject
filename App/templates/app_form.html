@@ -7,6 +7,7 @@
     </head>
     <body>
         <div class="container parent" align=center>
+            <h1 class="white display-4">Recherche avancée :</h1>
             <form method="POST">
                 {{ form.csrf_token }}
                 <p>PRIX ENTRE {{ form.price_low(size=10) }} m² et {{ form.price_high(size=10) }} m²</p>
