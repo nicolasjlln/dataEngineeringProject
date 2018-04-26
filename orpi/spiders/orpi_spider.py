@@ -51,12 +51,16 @@ class OrpiSpider(scrapy.Spider):
 		agenceItem = response.meta['agenceItem']
 		annonces = response.xpath('//script').re(r'items: (.*),')[0]
 		annonces = json.loads(''.join(annonces).encode('utf-8'))
+		i=0
 		for annonce in annonces:
 			annonceItem = AnnonceItem()
 			r3 = scrapy.Request("https://www.orpi.com/annonce-vente-"+str(annonce["slug"])+"/?agency=" + agenceItem["name_agence"] +"/", callback=self.parse_annonce)
 			r3.meta['agenceItem'] = agenceItem
 			r3.meta['annonce'] = annonce
 			r3.meta['annonceItem'] = annonceItem
+			i=i+1
+			if i==3:
+				break
 			yield r3
 
 	def parse_annonce(self, response):
