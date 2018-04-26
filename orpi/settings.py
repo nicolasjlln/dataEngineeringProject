@@ -14,6 +14,12 @@ BOT_NAME = 'orpi'
 SPIDER_MODULES = ['orpi.spiders']
 NEWSPIDER_MODULE = 'orpi.spiders'
 
+ITEM_PIPELINES = ['orpi.pipelines.OrpiPipeline', ]
+
+MONGODB_SERVER = "localhost"
+MONGODB_PORT = 27017
+MONGODB_DB = "orpi"
+MONGODB_COLLECTION = "itemorpi"
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'orpi (+http://www.yourdomain.com)'

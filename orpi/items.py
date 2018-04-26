@@ -8,7 +8,7 @@
 import scrapy
 from scrapy.item import Item, Field
 
-class OrpiItem(scrapy.Item):
+class AgenceItem(scrapy.Item):
     name_agence = Field()
     phone_agence = Field()
     email_agence = Field()
@@ -27,6 +27,7 @@ class OrpiItem(scrapy.Item):
     email_agent = Field()
     phone_agent = Field()
 
+class AnnonceItem(scrapy.Item):
     url_annonce = Field()
     domaine_annonce = Field()
     title_annonce = Field()
