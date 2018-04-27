@@ -12,6 +12,7 @@ class OrpiPipeline(object):
 
 	def __init__(self):
 		connection = pymongo.MongoClient("localhost", 27017)
+		connection.drop_database('orpi')
 		self.db = connection['orpi']
 
 	def process_item(self, item, spider):

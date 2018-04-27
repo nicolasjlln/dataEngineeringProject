@@ -26,23 +26,61 @@ class OrpiSpider(scrapy.Spider):
 			agenceItem['ad_number'] = agence["id"]
 			r1 = scrapy.Request("https://www.orpi.com/"+str(agence["slug"])+"/", callback=self.parse_agence)
 			r1.meta['agenceItem'] = agenceItem
+			r1.meta['agencies'] = agencies
 			yield r1
 			
 	def parse_agence(self, response):
+		agencies = response.meta['agencies']
 		agenceItem = response.meta['agenceItem']
-		agenceItem['rating_agence'] = response.xpath('//span[contains(@itemprop, "ratingValue")]//text()').extract_first()
-		agenceItem['description_agence'] = response.xpath('//div[@class="agencyHeader-text"]//p//text()').extract_first()
-		agenceItem['agent_number'] = response.xpath('//div[@class="stat-item"]//span[@class="dblock"]//text()').extract()[6]
-		agenceItem['sells_number_agence'] = response.xpath('//div[@class="stat-item"]//span[@class="dblock"]//text()').extract()[2]
-		agenceItem['location_number_agence'] = response.xpath('//div[@class="stat-item"]//span[@class="dblock"]//text()').extract_first()
-		agenceItem['name_agent'] = response.xpath('//div[@class="teamItem-content"]//span[@class="teamItem-name"]//text()').extract_first()
-		agenceItem['title_agent'] = response.xpath('//div[@class="teamItem-content"]//span[@class="teamItem-job"]//text()').extract_first()
-		agenceItem['email_agent'] = response.xpath('//div[@class="teamItem-contact"]//a[@class="textColorLink textColorLink--candy prefixed-icon"]//@href').extract_first().split(":")[1]
-		if agenceItem['name_agent'].encode('ascii','ignore') in response.xpath('//div[@class="teamItem-contact"]//a[@class="phone textColorLink textColorLink--candy prefixed-icon"]').extract()[1].decode('unicode_escape').encode('ascii','ignore'):
-			agenceItem['phone_agent'] = response.xpath('//div[@class="teamItem-contact"]//a[@class="phone textColorLink textColorLink--candy prefixed-icon"]//text()').extract()[1]
+		if len(response.xpath('//span[contains(@itemprop, "ratingValue")]//text()').extract()) > 0:
+			agenceItem['rating_agence'] = response.xpath('//span[contains(@itemprop, "ratingValue")]//text()').extract_first()
 		else:
-			agenceItem['phone_agent'] = response.xpath('//div[@class="teamItem-contact"]//a[@class="phone textColorLink textColorLink--candy prefixed-icon"]//text()').extract()[0]
-		r2 = scrapy.Request("https://www.orpi.com/recherche/buy?agency="+str(agenceItem["name_agence"])+"/", callback=self.parse_general_annonce)
+			agenceItem['rating_agence'] = None
+
+		if len(response.xpath('//div[@class="agencyHeader-text"]//p//text()').extract()) > 0:	
+			agenceItem['description_agence'] = response.xpath('//div[@class="agencyHeader-text"]//p//text()').extract_first()
+		else:
+			agenceItem['description_agence'] = None
+
+		if len(response.xpath('//div[@class="stat-item"]//span[@class="dblock"]//text()').extract()) > 6:
+			agenceItem['agent_number'] = response.xpath('//div[@class="stat-item"]//span[@class="dblock"]//text()').extract()[6]
+		else:
+			agenceItem['agent_number'] = None
+
+		if len(response.xpath('//div[@class="stat-item"]//span[@class="dblock"]//text()').extract()) > 2:	
+			agenceItem['sells_number_agence'] = response.xpath('//div[@class="stat-item"]//span[@class="dblock"]//text()').extract()[2]
+		else:
+			agenceItem['sells_number_agence'] = None
+
+		if len(response.xpath('//div[@class="stat-item"]//span[@class="dblock"]//text()').extract()) > 0:
+			agenceItem['location_number_agence'] = response.xpath('//div[@class="stat-item"]//span[@class="dblock"]//text()').extract_first()
+		else:
+			agenceItem['location_number_agence'] = None
+
+		if len(response.xpath('//div[@class="teamItem-content"]//span[@class="teamItem-name"]//text()').extract()) > 0:
+			agenceItem['name_agent'] = response.xpath('//div[@class="teamItem-content"]//span[@class="teamItem-name"]//text()').extract_first()
+		else:
+			agenceItem['name_agent'] = None
+
+		if len(response.xpath('//div[@class="teamItem-content"]//span[@class="teamItem-job"]//text()').extract()) > 0:
+			agenceItem['title_agent'] = response.xpath('//div[@class="teamItem-content"]//span[@class="teamItem-job"]//text()').extract_first()
+		else:
+			agenceItem['title_agent'] = None
+
+		if len(response.xpath('//div[@class="teamItem-contact"]//a[@class="textColorLink textColorLink--candy prefixed-icon"]//@href').extract()) > 0:
+			agenceItem['email_agent'] = response.xpath('//div[@class="teamItem-contact"]//a[@class="textColorLink textColorLink--candy prefixed-icon"]//@href').extract_first().split(":")[1]
+		else:
+			agenceItem['email_agent'] = None
+
+		if len(response.xpath('//div[@class="teamItem-contact"]//a[@class="phone textColorLink textColorLink--candy prefixed-icon"]').extract()) > 1:
+			if agenceItem['name_agent'].encode('ascii','ignore') in response.xpath('//div[@class="teamItem-contact"]//a[@class="phone textColorLink textColorLink--candy prefixed-icon"]').extract()[1].decode('unicode_escape').encode('ascii','ignore'):
+				agenceItem['phone_agent'] = response.xpath('//div[@class="teamItem-contact"]//a[@class="phone textColorLink textColorLink--candy prefixed-icon"]//text()').extract()[1]
+			else:
+				agenceItem['phone_agent'] = response.xpath('//div[@class="teamItem-contact"]//a[@class="phone textColorLink textColorLink--candy prefixed-icon"]//text()').extract()[0]
+		else:
+			agenceItem['phone_agent'] = None
+
+		r2 = scrapy.Request("https://www.orpi.com/recherche/buy?agency="+str(agenceItem["name_agence"]), callback=self.parse_general_annonce)
 		r2.meta['agenceItem'] = agenceItem
 		yield agenceItem
 		yield r2
@@ -51,25 +89,32 @@ class OrpiSpider(scrapy.Spider):
 		agenceItem = response.meta['agenceItem']
 		annonces = response.xpath('//script').re(r'items: (.*),')[0]
 		annonces = json.loads(''.join(annonces).encode('utf-8'))
-		i=0
-		for annonce in annonces:
-			annonceItem = AnnonceItem()
-			r3 = scrapy.Request("https://www.orpi.com/annonce-vente-"+str(annonce["slug"])+"/?agency=" + agenceItem["name_agence"] +"/", callback=self.parse_annonce)
-			r3.meta['agenceItem'] = agenceItem
-			r3.meta['annonce'] = annonce
-			r3.meta['annonceItem'] = annonceItem
-			i=i+1
-			if i==3:
-				break
-			yield r3
+		for annonce in annonces:	
+				annonceItem = AnnonceItem()
+				r3 = scrapy.Request("https://www.orpi.com/annonce-vente-"+str(annonce["slug"])+"/?agency=" + agenceItem["name_agence"], callback=self.parse_annonce)
+				r3.meta['agenceItem'] = agenceItem
+				r3.meta['annonce'] = annonce
+				r3.meta['annonceItem'] = annonceItem
+				yield r3
 
 	def parse_annonce(self, response):
 		agenceItem = response.meta['agenceItem']
 		annonce = response.meta['annonce']
 		annonceItem = response.meta['annonceItem']
 		annonceItem['url_annonce'] = response.url
-		annonceItem['title_annonce'] = ''.join(response.xpath('//h1[@class="h1 cap"]//span[@class="text"]//text()').extract())
+
+		if len(response.xpath('//div[@class="info"]//p[@class="title"]//a[@class="defaultLink defaultLink--candy"]//@href').extract()) > 0:
+			annonceItem['agence_annonce'] = "www.orpi.com" + str(response.xpath('//div[@class="info"]//p[@class="title"]//a[@class="defaultLink defaultLink--candy"]//@href').extract_first())
+		else:
+			annonceItem['agence_annonce'] = None
+
+		if len(response.xpath('//h1[@class="h1 cap"]//span[@class="text"]//text()').extract()) > 0:
+			annonceItem['title_annonce'] = ''.join(response.xpath('//h1[@class="h1 cap"]//span[@class="text"]//text()').extract())
+		else:
+			annonceItem['title_annonce'] = None
+
 		annonceItem['type_annonce'] = annonce['type']
+
 		for i in range(0,len(response.xpath('//ul[@class="dotted-list dotted-list--ocom"]//li').extract())):
 			if 'Nombre de pi' in response.xpath('//ul[@class="dotted-list dotted-list--ocom"]//li').extract()[i]:
 				annonceItem['room_number_annonce'] = response.xpath('//ul[@class="dotted-list dotted-list--ocom"]//li//text()').extract()[3*i+2]
@@ -112,16 +157,37 @@ class OrpiSpider(scrapy.Spider):
 				break
 			else:
 				annonceItem['total_storey_annonce'] = None
-		annonceItem['description_annonce'] = response.xpath('//div[@class="paragraphs-textcell"]//p//text()').extract_first()
+
 		if 'GES' in str(response.xpath('//div[@class="estate-diagnostic-content"]').extract()):
-			annonceItem['ges_annonce'] = response.xpath('//div[@class="estate-diagnostic-content"]//text()').extract()[6]
+			if len(response.xpath('//div[@class="estate-diagnostic-content"]//text()').extract())>6:
+				annonceItem['ges_annonce'] = response.xpath('//div[@class="estate-diagnostic-content"]//text()').extract()[6]
+			else:
+				annonceItem['ges_annonce'] = None
 		else:
 			annonceItem['ges_annonce'] = None
 		if 'DPE' in str(response.xpath('//div[@class="estate-diagnostic-content"]').extract()):
-			annonceItem['energy_annonce'] = response.xpath('//div[@class="estate-diagnostic-content"]//text()').extract()[2]
+			if len(response.xpath('//div[@class="estate-diagnostic-content"]//text()').extract())>2:
+				annonceItem['energy_annonce'] = response.xpath('//div[@class="estate-diagnostic-content"]//text()').extract()[2]
+			else:
+				annonceItem['energy_annonce'] = None
 		else:
 			annonceItem['energy_annonce'] = None
-		annonceItem['location_annonce'] = response.xpath('//span[@class="c-vignette__address"]//text()').extract_first()
-		annonceItem['local_id_annonce'] = response.xpath('//div[@class="estateNeighborhood__ref"]//text()').extract_first().split(" : ")[1].split("\n")[0]
+
+		if len(response.xpath('//span[@class="c-vignette__address"]//text()').extract()) > 0:
+			annonceItem['location_annonce'] = response.xpath('//span[@class="c-vignette__address"]//text()').extract_first()
+		else:
+			annonceItem['location_annonce'] = None
+
+		if len(response.xpath('//div[@class="estateNeighborhood__ref"]//text()').extract()) > 0:
+			annonceItem['local_id_annonce'] = response.xpath('//div[@class="estateNeighborhood__ref"]//text()').extract_first().split(" : ")[1].split("\n")[0]
+		else:
+			annonceItem['local_id_annonce'] = None
+
+		if len(response.xpath('//div[@class="paragraphs-textcell"]//p//text()').extract()) > 0:
+			annonceItem['description_annonce'] = response.xpath('//div[@class="paragraphs-textcell"]//p//text()').extract_first()
+		else:
+			annonceItem['description_annonce'] = None
+
 		annonceItem['images_annonce'] = annonce['images']
+
 		yield annonceItem
