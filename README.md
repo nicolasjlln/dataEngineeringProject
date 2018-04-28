@@ -41,101 +41,38 @@ $ git clone https://gitlab.com/charleswit/GuessMyAddress.git
 $ docker build -t [name of the image] .
 $ docker run -it [name of the image]
 ```
-> **If you need a Docker tutorial and/or explore its possibilities, go to [this link](https://docker-curriculum.com/ "Docker tutorial")
+> *If you need a Docker tutorial and/or explore its possibilities, go to [this link](https://docker-curriculum.com/ "Docker tutorial")*
 
 * Once you are in the docker image with the '**docker run**' command, the required libraries should have been installed and our application is ready to be used !
-To access the web portal, you will have to open a browser, and go to this link :
-```
-http://127.0.0.1:5000
-```
+
 
 ## How it works
 
-The basic use of GuessMyAddress lies in building the GuessMyAddress object with a Python dictionary.
-This dictionary contains information about a property advertisement.
+The basic use of our project lies in building the web application, coded with the Python framework __Flask__.
+The scrapped and stored data are information about a property advertisement in the ORPI web site.
 
-The informations give by the ad can be collected by scrapping. The following dictionary is an example of the informations that are required :
-```
-ADD_DICT = {
-    'city': 'Paris',
-    'cp': 75010,
-    'desc': "A l'angle de la Rue des Vinaigriers et du Faubourg Saint-Martin Paris Immobilier vous propose un espace de "
-            "122m2 donnant sur rue et cour. Parquet au sol, fenêtre double vitrage , chauffage électrique, coin cuisine "
-            "et toilettes séparés."
-            "La partie habitation correspond a peu près à 50% de l'espace."
-            "Beau volume. Bureaux en très bon état."
-            "Gros Travaux de copropriété Votés (ravalement de la cour, toiture et pignons) Le ravalement rue est récent.",
-    'prix': 965000.00,
-    'etage': None,
-    'pieces': 2,
-    'dep': 75,
-    'surface': 122
-}
-```
+Basically, the web app is used only for displaying the information. But it contains an __advance search function__, to order the result and/or have more relevent information.
 
-Once the dictionary is built, create the GuessMyAddress project with it !
+To access the web portal, you will have to open a browser, and go to this [link](http://127.0.0.1:5000 "Web portal") :
 ```
->>> from GuessMyAddress import GuessMyAddress
-
->>> gma = GuessMyAddress(ADD_DICT)
+http://127.0.0.1:5000
 ```
-
-### Main use
-
-To run the prediction and get the potential candidate addresses, simply use *.predict()* method as following :
-```
->>> gma.predict()
-```
-
-### Side functions
-
-If you want to decompose the algorithm, you can use the different object methods :
-
-* To check if there is a valid address in the ad. This method returns the eventual valid addresses as a Pandas dataframe :
-```
->>> gma.addresses()
-```
-
-* To check if there are points of interest in the ad's description. The detected PoI's are returned as a list of dictionaries :
-```
->>> gma.get_pois()
-```
-
-* To geocode and identify potential addresses according to PoI's isochrone perimeters :
-```
->>> gma.candidates_poi()
-```
-
-* To check if there are features (like floor number, presence of a lift, a parking...) in the ad's description. They are returned as dictionary :
-```
->>> gma.get_features()
-```
-
-* To try to score a probability for each candidate address depending on it's features
-```
->>> gma.score()
-```
+Then, you are in the app, enjoy !
 
 ## Built With
 
-* [Shapely](http://toblerity.org/shapely/manual.html) - The library for geometry
-* [GDAL](https://trac.osgeo.org/gdal/wiki/GdalOgrInPython) - Help to handle huge geojsons
-* [SpaCy](https://spacy.io/) - Natural language processing library
-* [Folium](https://github.com/python-visualization/folium) - Used to generate maps
-* [Geocoder](https://geocoder.readthedocs.io/) - Google geocoder for reverse-geocoding
-* [Pymysql](https://github.com/PyMySQL/PyMySQL) - Used to connect databases
-* [NLTK](http://www.nltk.org/) - Natural language toolkit
+* [Flask](flask.pocoo.org/) - Permited to build the web application
+* [MongoDB](https://www.mongodb.com/fr/) - Used for data managment
+* [Scrappy](https://scrapy.org/) - Brilliant scrapping framework
 
 ## Authors
 
 * **Nicolas JULLIEN** - [nicouilla](https://gitlab.com/nicouilla)
-* **Salahedin ABDELKRIM** - [salah7594](https://gitlab.com/salah7594)
 * **Vincent DECKER** - [VincentDecker](https://gitlab.com/VincentDecker)
-* **Monica KOY** - [Koy](https://gitlab.com/Koy)
-* **Morgan COURIVAUD** - [courivam](https://gitlab.com/courivam)
-* **Charles MAUPOU** - [charleswit](https://gitlab.com/charleswit)
+* **Yoann GALLOCHAT** - [yoannEsiee](https://github.com/yoannEsiee)
+* **Alexandre NORET** - [alexandre-noret](https://github.com/alexandre-noret)
 
-See also the list of [contributors](https://gitlab.com/charleswit/GuessMyAddress/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/nicolasjlln/dataEngineeringProject/settings/collaboration) who participated in this project.
 
 ## License
 
