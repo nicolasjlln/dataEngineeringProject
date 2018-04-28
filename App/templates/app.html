@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+
+        {% include "app_form_style.html" %}
+    </head>
+    <body>
+        <div class="container parent" align=center>
+            <h1 class="white display-4">Recherche avancée :</h1>
+            <form method="POST">
+                {{ form.csrf_token }}
+                <p>PRIX ENTRE {{ form.price_low(size=10) }} m² et {{ form.price_high(size=10) }} m²</p>
+                <p>SURFACE ENTRE {{ form.area_low(size=10) }} € et {{ form.area_high(size=10) }} €</p>
+                <p>NOMBRE DE CHAMBRES : {{ form.room_number(size=10) }}</p>
+                <button type=submit class="btn btn-info">Lancer la recherche</button>
+            </form>
+        </div>
+    </body>
+</html>
