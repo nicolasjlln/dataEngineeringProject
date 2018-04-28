@@ -41,15 +41,15 @@ $ git clone https://gitlab.com/charleswit/GuessMyAddress.git
 $ docker build -t [name of the image] .
 $ docker run -it [name of the image]
 ```
-> *If you need a Docker tutorial and/or explore its possibilities, go to [this link](https://docker-curriculum.com/ "Docker tutorial")*
+*If you need a Docker tutorial and/or explore its possibilities, go to [this link](https://docker-curriculum.com/ "Docker tutorial")*
 
 * Once you are in the docker image with the '**docker run**' command, the required libraries should have been installed and our application is ready to be used !
 
 
 ## How it works
 
-The basic use of our project lies in building the web application, coded with the Python framework __Flask__.
-The scrapped and stored data are information about a property advertisement in the ORPI web site.
+Our project lies in building the web application, coded with the Python framework __Flask__.
+The scrapped and stored data are information about property advertisements in the ORPI web site.
 
 Basically, the web app is used only for displaying the information. But it contains an __advance search function__, to order the result and/or have more relevent information.
 
