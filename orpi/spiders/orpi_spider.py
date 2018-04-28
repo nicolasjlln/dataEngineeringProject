@@ -9,11 +9,12 @@ import json
 
 class OrpiSpider(scrapy.Spider):
 	name= "orpi"
-	start_urls = ["https://www.orpi.com/agences-immobilieres/recherche"]
+	start_urls = ['https://www.orpi.com/agences-immobilieres/recherche']
 
 	def parse(self, response):
 		agencies = response.xpath('//script').re(r'agencies:\s*(.*)')
 		agencies = json.loads(''.join(agencies).encode('utf-8')[:-1])
+		listAgence=[]
 		for agence in agencies:
 			agenceItem = AgenceItem()
 			agenceItem['name_agence'] = agence['slug']
@@ -24,14 +25,16 @@ class OrpiSpider(scrapy.Spider):
 			agenceItem['lat_agence'] = agence["latitude"]
 			agenceItem['lon_agence'] = agence["longitude"]
 			agenceItem['ad_number'] = agence["id"]
-			r1 = scrapy.Request("https://www.orpi.com/"+str(agence["slug"])+"/", callback=self.parse_agence)
+			r1 = scrapy.Request('https://www.orpi.com/'+str(agence["slug"]), callback=self.parse_agence)
 			r1.meta['agenceItem'] = agenceItem
 			r1.meta['agencies'] = agencies
+			r1.meta['listAgence'] = listAgence
 			yield r1
 			
 	def parse_agence(self, response):
 		agencies = response.meta['agencies']
 		agenceItem = response.meta['agenceItem']
+		listAgence = response.meta['listAgence']
 		if len(response.xpath('//span[contains(@itemprop, "ratingValue")]//text()').extract()) > 0:
 			agenceItem['rating_agence'] = response.xpath('//span[contains(@itemprop, "ratingValue")]//text()').extract_first()
 		else:
@@ -80,25 +83,30 @@ class OrpiSpider(scrapy.Spider):
 		else:
 			agenceItem['phone_agent'] = None
 
-		r2 = scrapy.Request("https://www.orpi.com/recherche/buy?agency="+str(agenceItem["name_agence"]), callback=self.parse_general_annonce)
-		r2.meta['agenceItem'] = agenceItem
-		yield agenceItem
-		yield r2
+		#r2 = scrapy.Request("https://www.orpi.com/recherche/buy?agency="+str(agenceItem["name_agence"]), callback=self.parse_general_annonce)
+		#r2.meta['agenceItem'] = agenceItem	
+		listAgence.append(agenceItem)
+		if len(listAgence) < len(agencies):
+			yield agenceItem
+		else:
+			for item in listAgence:
+				r2 = scrapy.Request('https://www.orpi.com/recherche/buy?agency='+str(item["name_agence"]), callback=self.parse_general_annonce)
+				yield r2
 
 	def parse_general_annonce(self, response):
-		agenceItem = response.meta['agenceItem']
+		#agenceItem = response.meta['agenceItem']
 		annonces = response.xpath('//script').re(r'items: (.*),')[0]
 		annonces = json.loads(''.join(annonces).encode('utf-8'))
 		for annonce in annonces:	
 				annonceItem = AnnonceItem()
-				r3 = scrapy.Request("https://www.orpi.com/annonce-vente-"+str(annonce["slug"])+"/?agency=" + agenceItem["name_agence"], callback=self.parse_annonce)
-				r3.meta['agenceItem'] = agenceItem
+				r3 = scrapy.Request('https://www.orpi.com/annonce-vente-'+str(annonce["slug"])+'/?agency=' + agenceItem["name_agence"], callback=self.parse_annonce)
+				#r3.meta['agenceItem'] = agenceItem
 				r3.meta['annonce'] = annonce
 				r3.meta['annonceItem'] = annonceItem
 				yield r3
 
 	def parse_annonce(self, response):
-		agenceItem = response.meta['agenceItem']
+		#agenceItem = response.meta['agenceItem']
 		annonce = response.meta['annonce']
 		annonceItem = response.meta['annonceItem']
 		annonceItem['url_annonce'] = response.url
