@@ -1,6 +1,21 @@
 from flask import render_template, redirect, request
 from App.forms import SearchForm
+from pymongo import MongoClient
 
+client = MongoClient("localhost", 27017)
+db = client['orpi']
+
+def getListAgencies():
+    return db.agence.distinct('name_agence')
+
+def getInfoAgence(name_agence):
+    return db.agence.findOne({'name_agence': name_agence})
+
+def getListAnnonces(nameAgence):
+    return db.annonce.distinct('title_annonce',{'agence_annonce': 'www.orpi.com/gambetta/'})
+
+def getInfoAnnonces(nameAnnonce):
+    db.annonce.findOne({'title_annonce': nameAnnonce})
 
 def Main_views(app):
     @app.route('/')
@@ -29,7 +44,7 @@ def Main_views(app):
             else:
                 return render_template('app_form.html', form=form, error=False)
         else:
-            agences_list = ["une agence", "deux agences", "trois agences"]#getListAgences()
+            agences_list = getListAgencies()
             return render_template('show_results.html', agences=agences_list)
 
 
@@ -41,15 +56,15 @@ def Main_views(app):
 
     @app.route('/app/annonce/<string:annonce>')
     def disp_annonce_infos(annonce: str=None):
-        annonce = {'title_annonce': 'TEST'}
+        annonce = getInfoAnnonces(annonce)
         return render_template('show_annonce.html', annonce=annonce)
 
     @app.route('/app/agence/annonces/<string:nom_agence>')
     def disp_annonces_from_agence(nom_agence: str=None):
-        annonces = ["une annonce de l'agence", "deux annonces de l'agence", "trois annonces de l'agence"]#getAnnoncesDicoAgence(nom_agence)
+        annonces =  getListAnnonces(nom_agence)
         return render_template('show_annonces_from_agence.html', annonces=annonces, nom_agence=nom_agence)
 
     @app.route('/app/agence/infos/<string:nom_agence>')
     def disp_agence_infos(nom_agence: str=None):
-        agence_infos = {'title_agence': 'TEST'}#getInfoAgence(nom_agence)
+        agence_infos = getInfoAgence(nom_agence)
         return render_template('show_agence.html', agence=agence_infos)

@@ -109,6 +109,10 @@ class OrpiSpider(scrapy.Spider):
 		annonceItem = response.meta['annonceItem']
 		annonceItem['url_annonce'] = response.url
 
+		if len(response.xpath('//div[@class="current-price"]//span[@class="price"]//text()').extract_first()) > 0:
+			annonceItem['price_annonce'] = response.xpath('//div[@class="current-price"]//span[@class="price"]//text()').extract_first()[0:7].replace(' ','')
+		else:
+			annonceItem['price_annonce'] = None
 		if len(response.xpath('//div[@class="info"]//p[@class="title"]//a[@class="defaultLink defaultLink--candy"]//@href').extract()) > 0:
 			annonceItem['agence_annonce'] = "www.orpi.com" + str(response.xpath('//div[@class="info"]//p[@class="title"]//a[@class="defaultLink defaultLink--candy"]//@href').extract_first())
 		else:

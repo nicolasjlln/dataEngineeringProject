@@ -29,6 +29,7 @@ class AgenceItem(scrapy.Item):
 
 class AnnonceItem(scrapy.Item):
     url_annonce = Field()
+    price_annonce = Field()
     agence_annonce = Field()
     domaine_annonce = Field()
     title_annonce = Field()
