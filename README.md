@@ -59,6 +59,13 @@ http://127.0.0.1:5000
 ```
 Then, you are in the app, enjoy !
 
+You must be aware that a virtual environment is created when the docker build is happening, and your python3 environment will be that one.
+To go out the virtual enironment, you must enter in the command prompt :
+```
+deactivate
+```
+*[Here](https://packaging.python.org/guides/installing-using-pip-and-virtualenv/ "Virualenv doc"), you will find informations about the python virtual environment we are using in our app.*
+
 ## Built With
 
 * [Flask](flask.pocoo.org/) - Permited to build the web application
