@@ -29,20 +29,18 @@
                     <li class="list-group-item"><h4>Classe GES (kg_egCO²/m².an) : </h4><p>{{ annonce.ges_annonce }}<p></li>
                     <li class="list-group-item"><h4>Description de l'annonce : </h4><p>{{ annonce.description_annonce }}<p></li>
                 </ul>
-            <form method="POST">
-                <div class="row justify-content-md-center">
-                    <div class="col col-lg-2">
-                        <form method="POST" action="{{ url_for('app_run') }}">
-                            <button type=submit class="btn btn-secondary">Nouvelle recherche</button>
-                        </form>
+            </div>
+            <div class="row justify-content-md-center">
+                <div class="col col-lg-2">
+                    <form method="POST" action="{{ url_for('app_run') }}">
+                        <button type=submit class="btn btn-secondary">Nouvelle recherche</button></form>
                     </div>
-                    <div class="col col-lg-2">
-                        <form method="GET" action="{{ url_for('app_run') }}">
-                            <button type=submit class="btn btn-secondary">Retour au menu</button>
-                        </form>
-                    </div>
+                <div class="col col-lg-2">
+                    <form method="GET" action="{{ url_for('app_run') }}">
+                        <button type=submit class="btn btn-secondary">Retour au menu</button>
+                    </form>
                 </div>
-            </form>
+            </div>
         </div>
         {% else %}
         <div class="container parent" align=center>

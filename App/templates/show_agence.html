@@ -23,20 +23,18 @@
                     <li class="list-group-item"><h4>Téléphone agent : </h4><p>{{ agence.phone_agent }}<p></li>
                     <li class="list-group-item"><h4>Email de l'agent : </h4><p>{{ agence.email_agent }}<p></li>
                 </ul>
-            <form method="POST">
-                <div class="row justify-content-md-center">
-                    <div class="col col-lg-2">
-                        <form method="POST" action="{{ url_for('app_run') }}">
-                            <button type=submit class="btn btn-secondary">Nouvelle recherche</button>
-                        </form>
-                    </div>
-                    <div class="col col-lg-2">
-                        <form method="GET" action="{{ url_for('app_run') }}">
-                            <button type=submit class="btn btn-secondary">Retour au menu</button>
-                        </form>
-                    </div>
+            <div class="row justify-content-md-center">
+                <div class="col col-lg-2">
+                    <form method="POST" action="{{ url_for('app_run') }}">
+                        <button type=submit class="btn btn-secondary">Nouvelle recherche</button>
+                    </form>
                 </div>
-            </form>
+                <div class="col col-lg-2">
+                    <form method="GET" action="{{ url_for('app_run') }}">
+                        <button type=submit class="btn btn-secondary">Retour au menu</button>
+                    </form>
+                </div>
+            </div>
         </div>
         {% else %}
         <div class="container parent" align=center>
