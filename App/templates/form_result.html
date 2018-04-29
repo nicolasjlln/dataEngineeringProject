@@ -8,6 +8,17 @@
     <body>
         <div class="container parent" align=center>
             <h1 class="display-4">Résultats de la recherche</h1>
+
+            {% if annonces %}
+            <h4 class="white">Vous pouvez cliquer sur une des annonces pour accéder à ses informations.</h4>
+
+            <div class="list-group">
+                {% for annonce in annonces %}
+                <a href="{{ url_for('disp_annonce_infos', annonce=annonce) }}" class="list-group-item list-group-item-action">{{ annonce }}</a>
+                {% endfor %}
+            </div>
+            {% endif %}
+
             <div class="row justify-content-md-center">
                 <div class="col col-lg-2">
                     <form method="POST" action="{{ url_for('app_run') }}">

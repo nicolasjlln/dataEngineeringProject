@@ -13,6 +13,7 @@
                 <p>PRIX ENTRE {{ form.price_low(size=10) }} € et {{ form.price_high(size=10) }} €</p>
                 <p>SURFACE ENTRE {{ form.area_low(size=10) }} m² et {{ form.area_high(size=10) }} m²</p>
                 <p>NOMBRE DE CHAMBRES : {{ form.room_number(size=10) }}</p>
+                <p>TYPE DE BIEN (mettre "a" pour appartement et "m" pour maison) : {{ form.type(size=4) }}</p>
                 <button type=submit class="btn btn-info">Lancer la recherche</button>
             </form>
 

@@ -8,7 +8,16 @@
     <body>
         <div class="container parent" align=center>
             <form method="POST">
-                <h1 class="white display-4">Résultats du scrapping</h1>
+                <h1 class="white display-4">Séléction par agence</h1>
+                {% if agences %}
+                <h4 class="white">Vous pouvez cliquer sur une des agences ci-dessous pour accéder à ses annonces.</h4>
+
+                <div class="list-group">
+                    {% for agence in agences %}
+                    <a href="{{ url_for('disp_annonces_from_agence', nom_agence=agence) }}" class="list-group-item list-group-item-action">{{ agence }}</a>
+                    {% endfor %}
+                </div>
+                {% endif %}
                 <button type=submit class="btn btn-secondary">Recherche avancée</button>
             </form>
         </div>

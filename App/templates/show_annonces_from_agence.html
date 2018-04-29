@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+
+        {% include "show_annonces_from_agence_style.html" %}
+    </head>
+    <body>
+        <div class="container parent" align=center>
+
+            <h1 class="white display-4">Séléction de l'annonce</h1>
+
+            <form action="{{ url_for('disp_agence_infos', nom_agence =nom_agence) }}">
+                <button type=submit class="btn btn-secondary">Informations sur l'agence</button>
+            </form>
+
+            {% if annonces %}
+            <h4 class="white">Vous pouvez cliquer sur une des annonces de l'agence ci-dessous pour accéder à ses informations.</h4>
+
+            <div class="list-group">
+                {% for annonce in annonces %}
+                <a href="{{ url_for('disp_annonce_infos', annonce=annonce) }}" class="list-group-item list-group-item-action">{{ annonce }}</a>
+                {% endfor %}
+            </div>
+            {% endif %}
+            <form method="POST" action="{{ url_for('app_run') }}">
+                <button type=submit class="btn btn-secondary">Recherche avancée</button>
+            </form>
+        </div>
+    </body>
+</html>

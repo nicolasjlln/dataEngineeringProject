@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+        {% include "show_agence_style.html" %}
+    </head>
+    <body>
+        {% if agence %}
+        <div class="container parent" align=center>
+            <div align="left">
+                <h1 class="white display-4">Agence :</h1>
+            </div>
+            <div align="left">
+                <ul class="list-group">
+                    <li class="list-group-item"><h4>Nom de l'agence : </h4><p>{{ agence.name_agence }}</p></li>
+                    <li class="list-group-item"><h4>Adresse : </h4><p>{{ agence.address_agence }}, {{ agence.city_agence }}<p></li>
+                    <li class="list-group-item"><h4>Numéro de l'agence : </h4><p>{{ agence.phone_agence }}<p></li>
+                    <li class="list-group-item"><h4>Email : </h4><p>{{ agence.email_agence }}<p></li>
+                    <li class="list-group-item"><h4>Note attribué : </h4><p>{{ agence.rating_agence }}<p></li>
+                    <li class="list-group-item"><h4>Description : </h4><p>{{ agence.desciption_agence }}<p></li>
+                    <li class="list-group-item"><h4>Nom de l'agent : </h4><p>{{ agence.name_agent }}<p></li>
+                    <li class="list-group-item"><h4>Fonction de l'agent : </h4><p>{{ agence.title_agent }}<p></li>
+                    <li class="list-group-item"><h4>Téléphone agent : </h4><p>{{ agence.phone_agent }}<p></li>
+                    <li class="list-group-item"><h4>Email de l'agent : </h4><p>{{ agence.email_agent }}<p></li>
+                </ul>
+            <form method="POST">
+                <div class="row justify-content-md-center">
+                    <div class="col col-lg-2">
+                        <form method="POST" action="{{ url_for('app_run') }}">
+                            <button type=submit class="btn btn-secondary">Nouvelle recherche</button>
+                        </form>
+                    </div>
+                    <div class="col col-lg-2">
+                        <form method="GET" action="{{ url_for('app_run') }}">
+                            <button type=submit class="btn btn-secondary">Retour au menu</button>
+                        </form>
+                    </div>
+                </div>
+            </form>
+        </div>
+        {% else %}
+        <div class="container parent" align=center>
+            <h1 class="white display-4">L'agence n'a pas été trouvée dans la base de données !</h1>
+        </div>
+        {% endif %}
+    </body>
+</html>
