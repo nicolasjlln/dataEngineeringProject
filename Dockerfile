@@ -12,3 +12,8 @@ RUN pip3 install -r requirements.txt
 RUN apt-get install virtualenv
 RUN virtualenv venv
 RUN . venv/bin/activate
+
+RUN sudo service mongod
+RUN scrapy crawl orpi
+
+RUN python run.py

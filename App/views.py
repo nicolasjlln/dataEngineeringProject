@@ -33,3 +33,7 @@ def Main_views(app):
     def success(price_low=None, price_high=None, surface_low=None, surface_high=None, room_num=None):
         print("{} {} {} {} {}".format(price_low, price_high, surface_low, surface_high, room_num))
         return render_template('form_result.html')
+
+    @app.route('/app/annonce/<string:annonce>')
+    def disp_annonce(annonce: str=None):
+        return render_template('show_annonce.html', annonce=annonce)

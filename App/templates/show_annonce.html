@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+        {% include "show_annonce_style.html" %}
+    </head>
+    <body>
+        {% if annonce %}
+        <div class="container parent" align=center>
+            <div align="left">
+                <h1 class="white display-4">Annonce :</h1>
+            </div>
+            <div align="left">
+                <ul class="list-group">
+                    <li class="list-group-item"><h4>Titre de l'annonce : </h4><p>{{ annonce.title_annonce }}</p></li>
+                    <li class="list-group-item"><h4>Type : </h4><p>{{ annonce.type_annonce }}<p></li>
+                    <li class="list-group-item"><h4>Localisation : </h4><p>{{ annonce.location_annonce }}<p></li>
+                    <li class="list-group-item"><h4>Nombre de pièces : </h4><p>{{ annonce.room_number_annonce }}<p></li>
+                    <li class="list-group-item"><h4>Surface (m²) : </h4><p>{{ annonce.area_annonce }}<p></li>
+                    <li class="list-group-item"><h4>Nombre de chambres : </h4><p>{{ annonce.bedroom_number_annonce }}<p></li>
+                    <li class="list-group-item"><h4>Nombre de salles de bain : </h4><p>{{ annonce.bathroom_number_annonce }}<p></li>
+                    <li class="list-group-item"><h4>Année de construction : </h4><p>{{ annonce.construction_year_annonce }}<p></li>
+                    <li class="list-group-item"><h4>Nombre d'étages total du bien : </h4><p>{{ annonce.total_storey_annonce }}<p></li>
+                    {% if annonce.type_annonce == "appartement" %}
+                    <li class="list-group-item"><h4>Situé à l'étage n° : </h4><p>{{ annonce.storey_annonce }}<p></li>
+                    {% endif %}
+                    <li class="list-group-item"><h4>Classe énergétique (KWh/m².an) : </h4><p>{{ annonce.energy_annonce }}<p></li>
+                    <li class="list-group-item"><h4>Classe GES (kg_egCO²/m².an) : </h4><p>{{ annonce.ges_annonce }}<p></li>
+                    <li class="list-group-item"><h4>Description de l'annonce : </h4><p>{{ annonce.description_annonce }}<p></li>
+                </ul>
+            <form method="POST">
+                <div class="row justify-content-md-center">
+                    <div class="col col-lg-2">
+                        <form method="POST" action="{{ url_for('app_run') }}">
+                            <button type=submit class="btn btn-secondary">Nouvelle recherche</button>
+                        </form>
+                    </div>
+                    <div class="col col-lg-2">
+                        <form method="GET" action="{{ url_for('app_run') }}">
+                            <button type=submit class="btn btn-secondary">Retour au menu</button>
+                        </form>
+                    </div>
+                </div>
+            </form>
+        </div>
+        {% else %}
+        <div class="container parent" align=center>
+            <h1 class="white display-4">L'agence n'a pas été trouvée dans la base de données !</h1>
+        </div>
+        {% endif %}
+    </body>
+</html>
