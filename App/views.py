@@ -15,7 +15,14 @@ def getListAnnonces(nameAgence):
     return db.annonce.distinct('title_annonce',{'agence_annonce': 'www.orpi.com/' +nameAgence+'/'})
 
 def getInfoAnnonces(nameAnnonce):
-    return db.annonce.find_one({'title_annonce': nameAnnonce})
+    return db.annonce.find_one({'title_annonce': nameAnnonce}) 
+
+def rechercheAvancee(price_low, price_high, surface_low, surface_high, room_num, type1):
+    return db.annonce.distinct('title_annonce',
+        {'$and':[{'price_annonce':{'$gte': price_low, '$lte': price_high}}, 
+        {'room_number_annonce': room_num}, 
+        {'area_annonce':{'$gte': surface_low, '$lte': surface_high}}, 
+        {'type_annonce':type1}]})
 
 def Main_views(app):
     @app.route('/')
@@ -48,10 +55,13 @@ def Main_views(app):
             return render_template('show_results.html', agences=agences_list)
 
 
-    @app.route('/app/result/pl=<int:price_low>&ph=<int:price_high>&sl=<int:surface_low>&sh=<int:surface_high>&rn=<int:room_num>&ty=<string:type>')
-    def success(price_low=None, price_high=None, surface_low=None, surface_high=None, room_num=None, type=None):
-        print("{} {} {} {} {} {}".format(price_low, price_high, surface_low, surface_high, room_num, type))
-        annonces = ["une annonce", "deux annonces", "trois annonces"]
+    @app.route('/app/result/pl=<int:price_low>&ph=<int:price_high>&sl=<int:surface_low>&sh=<int:surface_high>&rn=<int:room_num>&ty=<string:type1>')
+    def success(price_low=None, price_high=None, surface_low=None, surface_high=None, room_num=None, type1=None):
+        if type1=='m':
+            type1='maison'
+        elif type1=='a':
+            type1=='appartement'
+        annonces = rechercheAvancee(price_low, price_high, surface_low, surface_high, room_num, type1)
         return render_template('form_result.html', annonces=annonces)
 
     @app.route('/app/annonce/<string:annonce>')

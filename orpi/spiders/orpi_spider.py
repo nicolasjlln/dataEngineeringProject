@@ -110,7 +110,7 @@ class OrpiSpider(scrapy.Spider):
 		annonceItem['url_annonce'] = response.url
 
 		if len(response.xpath('//div[@class="current-price"]//span[@class="price"]//text()').extract_first()) > 0:
-			annonceItem['price_annonce'] = response.xpath('//div[@class="current-price"]//span[@class="price"]//text()').extract_first()[0:7].replace(' ','')
+			annonceItem['price_annonce'] = int(response.xpath('//div[@class="current-price"]//span[@class="price"]//text()').extract_first()[0:7].replace(' ',''))
 		else:
 			annonceItem['price_annonce'] = None
 		if len(response.xpath('//div[@class="info"]//p[@class="title"]//a[@class="defaultLink defaultLink--candy"]//@href').extract()) > 0:
@@ -127,7 +127,7 @@ class OrpiSpider(scrapy.Spider):
 
 		for i in range(0,len(response.xpath('//ul[@class="dotted-list dotted-list--ocom"]//li').extract())):
 			if 'Nombre de pi' in response.xpath('//ul[@class="dotted-list dotted-list--ocom"]//li').extract()[i]:
-				annonceItem['room_number_annonce'] = response.xpath('//ul[@class="dotted-list dotted-list--ocom"]//li//text()').extract()[3*i+2]
+				annonceItem['room_number_annonce'] = int(response.xpath('//ul[@class="dotted-list dotted-list--ocom"]//li//text()').extract()[3*i+2])
 				break
 			else:
 				annonceItem['room_number_annonce'] = None
@@ -151,7 +151,8 @@ class OrpiSpider(scrapy.Spider):
 				annonceItem['construction_year_annonce'] = None
 		for i in range(0,len(response.xpath('//ul[@class="dotted-list dotted-list--ocom"]//li').extract())):
 			if 'Surface<' in response.xpath('//ul[@class="dotted-list dotted-list--ocom"]//li').extract()[i]:
-				annonceItem['area_annonce'] = response.xpath('//ul[@class="dotted-list dotted-list--ocom"]//li//text()').extract()[3*i+2].split(' ')[0]
+				annonceItem['area_annonce'] = float(response.xpath('//ul[@class="dotted-list dotted-list--ocom"]//li//text()').extract()[3*i+2].split(' ')[0])
+				annonceItem['area_annonce'] = int(annonceItem['area_annonce'])
 				break
 			else:
 				annonceItem['area_annonce'] = None
