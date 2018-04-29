@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+
+        {% include "welcome_style.html" %}
+    </head>
+    <body>
+        <div class="container parent" align=center>
+            <h1 class="white display-4">Bienvenu dans notre application !</h1>
+            <h5 class="white">Pour accéder aux recherches, veuillez cliquer sur le bouton ci-dessous.</h5>
+            <form action="{{ url_for('app_run') }}" method="GET">
+                <button type="submit" class="btn btn-info" id="button_welcome" value="submit">Accéder à l'application</button>
+            </form>
+        </div>
+    </body>
+</html>
