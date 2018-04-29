@@ -10,6 +10,7 @@
             <h1 class="display-4">Résultats de la recherche</h1>
 
             {% if annonces %}
+
             <h4 class="white">Vous pouvez cliquer sur une des annonces pour accéder à ses informations.</h4>
 
             <div class="list-group">
@@ -17,6 +18,11 @@
                 <a href="{{ url_for('disp_annonce_infos', annonce=annonce) }}" class="list-group-item list-group-item-action">{{ annonce }}</a>
                 {% endfor %}
             </div>
+
+            {% else %}
+
+            <h4 class="white">Votre recherche n'aboutit à aucun résultat.</h4>
+
             {% endif %}
 
             <div class="row justify-content-md-center">
