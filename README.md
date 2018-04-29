@@ -45,7 +45,6 @@ $ docker run -it [name of the image]
 
 * Once you are in the docker image with the '**docker run**' command, the required libraries should have been installed and our application is ready to be used !
 
-
 ## How it works
 
 Our project lies in building the web application, coded with the Python framework __Flask__.
@@ -58,6 +57,12 @@ To access the web portal, you will have to open a browser, and go to this [link]
 http://127.0.0.1:5000
 ```
 Then, you are in the app, enjoy !
+
+You can also run the app several times with the following command if you are at the project root directory :
+```
+python3 run.py
+```
+> And you can close it with "Ctrl + c" command.
 
 You must be aware that a virtual environment is created when the docker build is happening, and your python3 environment will be that one.
 To go out the virtual enironment, you must enter in the command prompt :
