@@ -9,13 +9,13 @@ def getListAgencies():
     return db.agence.distinct('name_agence')
 
 def getInfoAgence(name_agence):
-    return db.agence.findOne({'name_agence': name_agence})
+    return db.agence.find_one({'name_agence': name_agence})
 
 def getListAnnonces(nameAgence):
-    return db.annonce.distinct('title_annonce',{'agence_annonce': 'www.orpi.com/gambetta/'})
+    return db.annonce.distinct('title_annonce',{'agence_annonce': 'www.orpi.com/' +nameAgence+'/'})
 
 def getInfoAnnonces(nameAnnonce):
-    db.annonce.findOne({'title_annonce': nameAnnonce})
+    return db.annonce.find_one({'title_annonce': nameAnnonce})
 
 def Main_views(app):
     @app.route('/')
