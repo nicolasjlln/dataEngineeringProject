@@ -1,5 +1,4 @@
 # Data Engineering Project
-Scrapping et stockage sur base MongoDB d'un site de vente immobilière
 
 The Data Engineering project is a school project done during the 4th year of engineering school at ESIEE Paris.</br>
 The aim of this project is to scrap and store data from a website. Then, the goal is to permit the data access trough a local web portal. In this project, we had to scrap, store and make accecible data from a real estate website, called [ORPI](https://www.orpi.com/?utm_source=bing&utm_medium=cpc&msclkid=26b36418dde91e469c873efcb7e2f34b&gclid=CMnUhJn93NoCFUbNGQodJqcEVA&gclsrc=ds "ORPI website").
@@ -45,8 +44,9 @@ $ docker run -it [name of the image]
 
 * Once you are in the docker image with the '**docker run**' command, the required libraries should have been installed and our application is ready to be used !
 
-
 ## How it works
+
+### Basic application
 
 Our project lies in building the web application, coded with the Python framework __Flask__.
 The scrapped and stored data are information about property advertisements in the ORPI web site.
@@ -58,6 +58,40 @@ To access the web portal, you will have to open a browser, and go to this [link]
 http://127.0.0.1:5000
 ```
 Then, you are in the app, enjoy !
+
+You can also run the app several times with the following command if you are at the project root directory :
+```
+python3 run.py
+```
+> And you can close it with "Ctrl + c" command.
+
+You must be aware that a virtual environment is created when the docker build is happening, and your python3 environment will be that one.
+To go out the virtual enironment, you must enter in the command prompt :
+```
+deactivate
+```
+*[Here](https://packaging.python.org/guides/installing-using-pip-and-virtualenv/ "Virualenv doc"), you will find informations about the python virtual environment we are using in our app.*
+
+### To go further
+
+The application is designed to scrap only 12 agencies, for efficiency reasons. Note that if you run the app every hour, the results won't be the sames since the OPRI website changes its announces quite often.
+
+__But this number of scrapped announces can be changed !__
+For this, you will have to modify one file :
+```
+. Project
+|__ orpi
+      |__ spiders
+               |__ opri_spider.py  <- In this one !
+```
+
+Open it with a text modifier, go in the `OrpiSpider` python class, and in the `parse(...)` function, until you find this line :
+```
+agencies = agencies[0:<max_number>]
+```
+Initially, `<max_number>` is set to 12. But it can take any value !
+
+Once you modified it, save it, close it and run the app again (go back to the app root directory first).
 
 ## Built With
 
