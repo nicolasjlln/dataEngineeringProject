@@ -17,8 +17,7 @@ def getListAnnonces(nameAgence):
 def getInfoAnnonces(nameAnnonce):
     return db.annonce.find_one({'title_annonce': nameAnnonce}) 
 
-def rechercheAvancee(price_low, price_high, surface_low, surface_high, room_num, type1):
-    return db.annonce.distinct('title_annonce',
+def rechercheAvancee(price_low, price_high, surface_low, surface_high, room_num, type1):    return db.annonce.distinct('title_annonce',
         {'$and':[{'price_annonce':{'$gte': price_low, '$lte': price_high}}, 
         {'room_number_annonce': room_num}, 
         {'area_annonce':{'$gte': surface_low, '$lte': surface_high}}, 
