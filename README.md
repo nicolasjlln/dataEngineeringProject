@@ -32,17 +32,20 @@ $ pip3 install docker
 
 * You must clone the git dir or download it on your computer.
 ```
-$ git clone https://gitlab.com/charleswit/GuessMyAddress.git
+$ git clone https://gitlab.com/nicolasjlln/dataEngineeringProject
 ```
 
-* Using Docker, you have to build the Docker image with :
+* Using Docker, you have to build the Docker images and run them. Open a terminal and enter the commands in that order):
 ```
-$ docker build -t [name of the image] .
-$ docker run -it [name of the image]
+$ docker run -d --name mongo -p 27018:27017 mongo
+$ docker build -t scrapy -f Dockerfile_scrapy .
+$ docker build -t flask -f Dockerfile_flask .
+$ docker run -d --name flask --link mongo -p 5000:5000 flask
+$ docker run -it --name scrapy --link mongo scrapy
 ```
 *If you need a Docker tutorial and/or explore its possibilities, go to [this link](https://docker-curriculum.com/ "Docker tutorial")*
 
-* Once you are in the docker image with the '**docker run**' command, the required libraries should have been installed and our application is ready to be used !
+* Once you are in the docker image with the '**docker run**' commands, the required libraries should have been installed and our application is ready to be used !
 
 ## How it works
 
@@ -51,26 +54,13 @@ $ docker run -it [name of the image]
 Our project lies in building the web application, coded with the Python framework __Flask__.
 The scrapped and stored data are information about property advertisements in the ORPI web site.
 
-Basically, the web app is used only for displaying the information. But it contains an __advance search function__, to order the result and/or have more relevent information.
+Basically, the web app is used only for displaying the information. But it contains an __advance search function__, to order the results and/or get more relevent information.
 
-To access the web portal, you will have to open a browser, and go to this [link](http://127.0.0.1:5000 "Web portal") :
+To access the web portal, you will have to open a browser, and go to this [link](http://localhost:5000 "Web portal") :
 ```
-http://127.0.0.1:5000
+http://localhost:5000
 ```
 Then, you are in the app, enjoy !
-
-You can also run the app several times with the following command if you are at the project root directory :
-```
-python3 run.py
-```
-> And you can close it with "Ctrl + c" command.
-
-You must be aware that a virtual environment is created when the docker build is happening, and your python3 environment will be that one.
-To go out the virtual enironment, you must enter in the command prompt :
-```
-deactivate
-```
-*[Here](https://packaging.python.org/guides/installing-using-pip-and-virtualenv/ "Virualenv doc"), you will find informations about the python virtual environment we are using in our app.*
 
 ### To go further
 
@@ -117,14 +107,3 @@ This project is licensed under the ESIEE Paris License.
 * Hat tip to anyone who's code was used
 * Inspiration
 * etc
-
-
-
-
-## how to run
-All engines running:
-- docker run -d --name mongo -p 27018:27017 mongo
-- docker build -t scrapy -f Dockerfile_scrapy .
-- docker build -t flask -f Dockerfile_flask .
-- docker run -d --name flask --link mongo -p 5000:5000 flask
-- docker run -it --name scrapy --link mongo scrapy
