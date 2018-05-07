@@ -11,7 +11,7 @@ from .items import AgenceItem, AnnonceItem
 class OrpiPipeline(object):
 
 	def __init__(self):
-		connection = pymongo.MongoClient("localhost", 27017)
+		connection = pymongo.MongoClient("mongo", 27017)
 		connection.drop_database('orpi')
 		self.db = connection['orpi']
 

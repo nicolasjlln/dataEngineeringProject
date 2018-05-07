@@ -2,7 +2,7 @@ from flask import render_template, redirect, request
 from App.forms import SearchForm
 from pymongo import MongoClient
 
-client = MongoClient("localhost", 27017)
+client = MongoClient("mongo", 27017)
 db = client['orpi']
 
 def getListAgencies():

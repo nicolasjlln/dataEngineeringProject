@@ -1,0 +1,18 @@
+FROM python:3
+
+WORKDIR /home
+# Copie de tous les fichiers dans le conteneur
+COPY . .
+
+# Installation des paquets python3 utiles à l'application
+RUN pip install -r requirements.txt
+
+ENTRYPOINT ["/bin/bash"]
+
+CMD ["run.sh"]
+
+# Demarrage scrapping
+# RUN scrapy crawl orpi
+
+# On lance l'application
+# RUN python3 run.py

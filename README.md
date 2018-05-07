@@ -117,3 +117,14 @@ This project is licensed under the ESIEE Paris License.
 * Hat tip to anyone who's code was used
 * Inspiration
 * etc
+
+
+
+
+## how to run
+All engines running:
+- docker run -d --name mongo -p 27018:27017 mongo
+- docker build -t scrapy -f Dockerfile_scrapy .
+- docker build -t flask -f Dockerfile_flask .
+- docker run -d --name flask --link mongo -p 5000:5000 flask
+- docker run -it --name scrapy --link mongo scrapy

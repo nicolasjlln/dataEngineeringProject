@@ -76,13 +76,6 @@ class OrpiSpider(scrapy.Spider):
 		else:
 			agenceItem['email_agent'] = None
 
-		if len(response.xpath('//div[@class="teamItem-contact"]//a[@class="phone textColorLink textColorLink--candy prefixed-icon"]').extract()) > 1:
-			if agenceItem['name_agent'].encode('ascii','ignore') in response.xpath('//div[@class="teamItem-contact"]//a[@class="phone textColorLink textColorLink--candy prefixed-icon"]').extract()[1].decode('unicode_escape').encode('ascii','ignore'):
-				agenceItem['phone_agent'] = response.xpath('//div[@class="teamItem-contact"]//a[@class="phone textColorLink textColorLink--candy prefixed-icon"]//text()').extract()[1]
-			else:
-				agenceItem['phone_agent'] = response.xpath('//div[@class="teamItem-contact"]//a[@class="phone textColorLink textColorLink--candy prefixed-icon"]//text()').extract()[0]
-		else:
-			agenceItem['phone_agent'] = None
 	
 		listAgence.append(agenceItem)
 		if len(listAgence) < len(agencies):
